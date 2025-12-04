@@ -5,11 +5,12 @@ let clock = new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-// Estado de encendido/apagado
+// Estado del monitor
 let monitorOn = false;
 
-// Ruta del modelo
-const MODEL_PATH = './modelo/escritorio/portafolio.gltf';
+// RUTA CORRECTA DE TU MODELO .glb
+const MODEL_PATH = './assets/escritorio/portafolio.glb';
+
 
 function initThreeJS() {
     container = document.getElementById('three-canvas-container');
@@ -43,16 +44,15 @@ function initThreeJS() {
     scene.add(ambientLight);
     scene.add(directionalLight);
 
-    // Controles de cámara
+    // Controles
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
     controls.minDistance = 1;
     controls.maxDistance = 10;
     controls.target.set(0, 0.5, 0);
     controls.update();
 
-    // Cargar modelo GLTF
+    // Cargar modelo GLB
     const loader = new THREE.GLTFLoader();
     loader.load(
         MODEL_PATH,
@@ -60,15 +60,26 @@ function initThreeJS() {
             model = gltf.scene;
             model.scale.set(1, 1, 1);
             model.position.set(0, 0, 0);
+
+            // IMPORTANTE: permitir que los materiales respondan a emisivos
+            model.traverse((child) => {
+                if (child.isMesh && child.material) {
+                    child.material.emissive = new THREE.Color(0x000000);
+                    child.material.emissiveIntensity = 0;
+                }
+            });
+
             scene.add(model);
 
-            applyTheme(document.documentElement.classList.contains('dark'));
+            console.log("Modelo cargado:", MODEL_PATH);
+
+            applyTheme(document.documentElement.classList.contains("dark"));
         },
         (xhr) => {
-            console.log(`Cargando modelo 3D: ${Math.round(xhr.loaded / xhr.total * 100)}%`);
+            console.log(`Cargando modelo: ${Math.round((xhr.loaded / xhr.total) * 100)}%`);
         },
         (error) => {
-            console.error('Error al cargar el modelo:', error);
+            console.error("❌ ERROR cargando modelo GLB:", error);
         }
     );
 
@@ -76,9 +87,9 @@ function initThreeJS() {
 }
 
 
-// FUNCIÓN DE PARTÍCULAS
+// EFECTO DE PARTÍCULAS
 function particleBurst() {
-    const count = 80; 
+    const count = 80;
     const positions = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
@@ -116,7 +127,7 @@ function particleBurst() {
 }
 
 
-// DETECTAR CLIC SOBRE EL MONITOR 
+// CLIC EN EL MONITOR
 function onClickScene(event) {
     if (!model) return;
 
@@ -127,57 +138,53 @@ function onClickScene(event) {
     raycaster.setFromCamera(mouse, camera);
 
     const intersects = raycaster.intersectObject(model, true);
+    if (intersects.length === 0) return;
 
-    if (intersects.length > 0) {
-        const obj = intersects[0].object;
+    const obj = intersects[0].object;
 
-        // 👉 Nombre exacto del objeto en Blender
-        if (obj.name === "Monitor") {
+    console.log("Objeto clickeado:", obj.name);
 
-            monitorOn = !monitorOn; // alternar estado
+    // CAMBIA "Monitor" POR EL NOMBRE EXACTO DE BLENDER
+    if (obj.name.includes("Monitor")) {
 
-            if (monitorOn) {
-                obj.material.emissive.setHex(0x00aaff);
-                obj.material.emissiveIntensity = 2;
-                particleBurst(); // efecto especial opcional
-            } else {
-                obj.material.emissive.setHex(0x000000);
-                obj.material.emissiveIntensity = 0;
-            }
+        monitorOn = !monitorOn;
+
+        if (monitorOn) {
+            obj.material.emissive.setHex(0x00aaff);
+            obj.material.emissiveIntensity = 2;
+            particleBurst();
+        } else {
+            obj.material.emissive.setHex(0x000000);
+            obj.material.emissiveIntensity = 0;
         }
     }
 }
 
 
-// Animación principal
+// ANIMACIÓN PRINCIPAL
 function animate() {
     requestAnimationFrame(animate);
-
-    const delta = clock.getDelta();
 
     controls.update();
     renderer.render(scene, camera);
 }
 
 
-// Resize
+// AJUSTE AL REDIMENSIONAR
 function onWindowResize() {
-    if (!container || !camera || !renderer) return;
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
 
-// Dark Mode y luces
-function applyTheme(isDarkMode) {
-    if (isDarkMode) {
-        document.documentElement.classList.add('dark');
+// DARK MODE
+function applyTheme(isDark) {
+    if (isDark) {
         directionalLight.color.setHex(0xaaaaee);
         directionalLight.intensity = 2;
         ambientLight.intensity = 1.2;
     } else {
-        document.documentElement.classList.remove('dark');
         directionalLight.color.setHex(0xffffff);
         directionalLight.intensity = 1.5;
         ambientLight.intensity = 0.8;
@@ -185,28 +192,19 @@ function applyTheme(isDarkMode) {
 }
 
 
-// Botón dark mode
+// BOTONES
 const themeToggleBtn = document.getElementById('theme-toggle');
 if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.toggle("dark");
         applyTheme(isDark);
     });
 }
 
 
-// Botón partículas
-const btnParticulas = document.getElementById("btn-particulas");
-if (btnParticulas) {
-    btnParticulas.addEventListener("click", () => {
-        particleBurst();
-    });
-}
-
-
-// LISTENERS
-window.addEventListener('load', () => {
+// INICIALIZACIÓN
+window.addEventListener("load", () => {
     initThreeJS();
     renderer.domElement.addEventListener("click", onClickScene);
-    window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener("resize", onWindowResize);
 });
