@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio 3D | Jair Ezequiel Can Escalante</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuración de Tailwind
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#1e293b',
+                        'secondary-dark': '#0f172a',
+                        'accent': '#6366f1',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Tus estilos -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js y dependencias -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-secondary-dark text-gray-800 dark:text-gray-200">
+
+    <div class="flex justify-center mt-6">
+        <button id="btn-particulas" class="interactive-btn">
+            Activar Partículas 
+        </button>
+    </div>
+
+    <!-- CABECERA -->
+    <header class="sticky top-0 z-10 bg-white/90 dark:bg-secondary-dark/95 backdrop-blur-sm shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Avatar -->
+                <img src="Avatar.jpg"
+                     alt="Avatar de Jair Ezequiel Can Escalante"
+                     class="w-10 h-10 rounded-full ring-2 ring-accent">
+                <!-- Nombre -->
+                <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-50">
+                    Jair Ezequiel Can Escalante
+                </h1>
+            </div>
+            <nav class="hidden md:block">
+                <a href="#about" class="mx-3 text-sm font-medium hover:text-accent">Sobre mí</a>
+                <a href="#skills" class="mx-3 text-sm font-medium hover:text-accent">Habilidades</a>
+                <a href="#projects" class="mx-3 text-sm font-medium hover:text-accent">Proyectos</a>
+                <a href="#contact" class="mx-3 text-sm font-medium hover:text-accent">Contacto</a>
+            </nav>
+            <!-- Botón Dark Mode -->
+            <button id="theme-toggle" class="interactive-btn p-2 w-10 h-10 flex items-center justify-center">
+                <svg id="toggle-icon" class="w-5 h-5" fill="none" stroke="currentColor"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- SECCIÓN 3D -->
+        <section id="hero" class="mb-12 rounded-xl shadow-2xl overflow-hidden bg-white dark:bg-primary-dark p-4">
+            <h2 class="text-3xl font-bold mb-4 text-center text-gray-700 dark:text-gray-100">
+                Mi Set-up de Programador 🖥️
+            </h2>
+            <div id="three-canvas-container" class="w-full">
+                <!-- Aquí se inyecta el canvas de Three.js -->
+            </div>
+            <div class="flex justify-center mt-4">
+                <p class="text-sm italic text-gray-500 dark:text-gray-400">
+                    Puedes rotar, hacer zoom y mover la escena.
+                </p>
+            </div>
+        </section>
+
+        <!-- SOBRE MÍ -->
+        <section id="about" class="mb-12 p-8 rounded-xl shadow-xl bg-white dark:bg-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-accent">Sobre mí</h2>
+            <p class="text-lg leading-relaxed">
+                Soy Jair Ezequiel Can Escalante, estudiante de Graficación con un gran interés en los gráficos 3D, la 
+                animación y las experiencias inmersivas. Me gusta comprender cómo se construyen los mundos digitales y 
+                cómo pueden integrarse con tecnologías web modernas para crear interfaces dinámicas y visualmente impactantes.
+            </p>
+            <p class="mt-4 leading-relaxed">
+                Este portafolio es el reflejo de cómo combino el diseño 3D en Blender con la programación, utilizando 
+                Three.js para llevar modelos y entornos al navegador de forma optimizada e interactiva. Busco que cada proyecto 
+                no solo sea funcional, sino también una experiencia visual inmersiva que conecte con el usuario.
+            </p>
+            <p class="mt-4 leading-relaxed">
+                Disfruto aprender continuamente nuevas herramientas y buenas prácticas para mejorar tanto la calidad visual como 
+                el rendimiento técnico de mis proyectos. Mi motivación es crecer como profesional capaz de unir el arte digital 
+                con la ingeniería del software, creando aplicaciones útiles, fluidas y visualmente atractivas.
+            </p>
+        </section>
+
+        <!-- HABILIDADES -->
+        <section id="skills" class="mb-12 p-8 rounded-xl shadow-xl bg-white dark:bg-primary-dark">
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2 border-gray-200 dark:border-gray-700 text-accent">Habilidades</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">HTML Semántico</span>
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">CSS</span>
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">JavaScript</span>
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">Three.js / WebGL</span>
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">Blender (Modelado/Exportación)</span>
+                <span class="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 p-2 rounded-lg text-center font-medium">Git & GitHub</span>
+            </div>
+        </section>
+
+        <!-- PROYECTOS -->
+        <section id="projects" class="mb-12 p-8 rounded-xl shadow-xl bg-white dark:bg-primary-dark">
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2 border-gray-200 dark:border-gray-700 text-accent">Proyectos</h2>
+            <div class="space-y-6">
+                <div class="border border-gray-200 dark:border-gray-700 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-1">Login Bear</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Desarrollo de un inicio de sesión interactivo con animaciones utilizando Flutter y Dart.
+                    </p>
+                    <a href="#" class="text-accent hover:underline text-sm mt-2 block">Ver proyecto →</a>
+                </div>
+                <div class="border border-gray-200 dark:border-gray-700 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-1">Visualizador de Datos (D3.js)</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Implementación de un mapa interactivo para visualizar el crecimiento demográfico en la región.
+                    </p>
+                    <a href="#" class="text-accent hover:underline text-sm mt-2 block">Ver proyecto →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section id="contact" class="p-8 rounded-xl shadow-xl bg-white dark:bg-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 border-b pb-2 border-gray-200 dark:border-gray-700 text-accent">Contacto y Redes</h2>
+            <p class="text-lg mb-4">¡Conectemos! Puedes encontrarme en las siguientes plataformas:</p>
+            <div class="flex space-x-6 text-2xl">
+                <a href="https://github.com/ZjatairZ" target="_blank"
+                   class="text-gray-700 dark:text-gray-300 hover:text-accent transition duration-300"
+                   title="GitHub">
+                    <!-- Icono GitHub -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.5-2 3.5-5.5 3.5-7C18 6.5 17 5.5 17 5s-1.5-.5-2 0c-1 0-2 1-3 1.5C11.5 8.5 10.5 8 9.5 8c-1-0.5-2-1.5-3-1.5c-0.5-0.5-2 0-2 0s1 1.5 0 2.5c0 1.5 0 5-3.5 7a4.8 4.8 0 0 0-1 3.5v4"/>
+                        <path d="M9 18c-3 1-5-1-5-1"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/ZjatairZ" target="_blank"
+                   class="text-gray-700 dark:text-gray-300 hover:text-accent transition duration-300"
+                   title="LinkedIn">
+                    <!-- Icono LinkedIn -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 0-6-6h-4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4a6 6 0 0 0 6-6V8z"/>
+                        <path d="M12 16v-6"/>
+                    </svg>
+                </a>
+                <a href="mailto:jaez.can@example.com"
+                   class="text-gray-700 dark:text-gray-300 hover:text-accent transition duration-300"
+                   title="Email">
+                    <!-- Icono Mail -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="16" x="2" y="4" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 py-6 bg-primary-dark text-gray-400 dark:bg-secondary-dark/70 text-center text-sm">
+        <p>&copy; 2025 Jair Can. Construido con HTML, Tailwind CSS y Three.js. Todos los derechos reservados.</p>
+        <p class="mt-1">URL de Repositorio (Requisito 6): https://github.com/ZjatairZ/BlenderPage.git</p>
+    </footer>
+
+    <!-- Tu JS principal -->
+    <script src="main.js"></script>
+</body>
+</html>
